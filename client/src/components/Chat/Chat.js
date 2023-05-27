@@ -16,7 +16,7 @@ let socket;
 
 // The ID of function that tills the server that this user stoped typing.
 // This function is executed after 1sc from the last change on the msg input field.
-let stopedTypingFunId;
+let sendStopedTypingMsgFunId;
 
 const Chat = ({ location }) => {
   const [name, setName] = useState('');
@@ -59,7 +59,7 @@ const Chat = ({ location }) => {
 
     socket.on('stopedTyping', ({userName}) => {
       setTypingUser((currentTypingUser) =>  (userName === currentTypingUser ?
-          '' : // the current typing stoped typing
+          '' :                // the current typing user stoped typing
           currentTypingUser)  // the msg is irrelavent to the current typing user
         );
     });
@@ -79,13 +79,17 @@ const Chat = ({ location }) => {
   }
 
   const theUserIsTyping = (msgLen) => {
-    clearTimeout(stopedTypingFunId);
+    // If the user is still typing, remove the function 
+    // that notifies the server when the user has stopped typing.
+    clearTimeout(sendStopedTypingMsgFunId);
 
     if (msgLen%15 === 0 || msgLen === 1) {    // Send an update to the server every  
       socket.emit('startedTyping', name);     // 3 words and at the beginning.
     }
 
-    stopedTypingFunId = setTimeout(() => {
+    // If the user stoped typing for
+    // a sec notify the server.
+    sendStopedTypingMsgFunId = setTimeout(() => {
       socket.emit('stopedTyping', name);
     }, 1000);
   }
