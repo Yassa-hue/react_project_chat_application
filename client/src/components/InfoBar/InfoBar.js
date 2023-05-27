@@ -9,7 +9,7 @@ const InfoBar = ({ room, typingUser }) => (
   <div className="infoBar">
     <div className="leftInnerContainer">
       <img className="onlineIcon" src={onlineIcon} alt="online icon" />
-      <h3>{room} {(typingUser ? typingUser + " typing": null)}</h3>
+      <h3>{room}  {(typingUser ? typingUser + " is typing": null)}</h3>
     </div>
     <div className="rightInnerContainer">
       <a href="/"><img src={closeIcon} alt="close icon" /></a>
